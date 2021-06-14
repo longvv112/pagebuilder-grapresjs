@@ -19,3 +19,14 @@ body {
   height: auto;
   min-height: auto;
 }
+
+.panel__top {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  position: initial;
+  justify-content: center;
+}
+.panel__basic-actions {
+  position: initial;
+}

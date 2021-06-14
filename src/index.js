@@ -12,7 +12,7 @@ const editor = grapesjs.init({
   // height: '300px',
   // width: 'auto',
   // Disable the storage manager for the moment
-  storageManager: false,
+  // storageManager: false,
   // Avoid any default panel
   panels: { defaults: [] },
   blockManager: {
@@ -40,6 +40,53 @@ const editor = grapesjs.init({
 });
 
 const blockManager = editor.BlockManager;
+const commands = editor.Commands;
+const panels = editor.Panels;
+
+commands.add("add-section", editor => {
+  const section = editor.BlockManager.get('section');
+  console.log(section)
+  editor.DomComponents.addComponent(section.attributes.content)
+})
+
+panels.addPanel({
+  id: 'panel-top',
+  el: '.panel__top',
+});
+
+panels.addPanel({
+  id: 'basic-actions',
+  el: '.panel__basic-actions',
+  buttons: [
+    {
+      id: 'visibility',
+      active: true, // active by default
+      className: 'btn-toggle-borders',
+      label: '<u>B</u>',
+      command: 'sw-visibility', // Built-in command
+    }, {
+      id: 'export',
+      className: 'btn-open-export',
+      label: 'Exp',
+      command: 'export-template',
+      context: 'export-template', // For grouping context of buttons from the same panel
+    }, {
+      id: 'show-json',
+      className: 'btn-show-json',
+      label: 'JSON',
+      context: 'show-json',
+      command(editor) {
+        editor.Modal.setTitle('Components JSON')
+            .setContent(`<textarea style="width:100%; height: 250px;">
+            ${JSON.stringify(editor.getComponents())}
+          </textarea>`)
+            .open();
+      },
+    }
+  ],
+});
+
+
 
 blockManager.add('section', {
   label: 'Section',
@@ -52,7 +99,8 @@ blockManager.add('section', {
       {
         "attributes": {
           "class": "fa fa-plus"
-        }
+        },
+        command: "add-section"
       },
       {
         "attributes": {
@@ -79,15 +127,28 @@ blockManager.add('section', {
         "command": "tlb-delete"
       }
     ],
-    content: "Long dep rai"
-    // components: [
-    //   {
-    //     attributes: {
-    //       class: "container",
-    //     },
-    //     content: "Long dep rai"
-    //   }
-    // ]
+    style: {
+      width: '100%',
+      "padding-left": '15px',
+      "padding-right": '15px',
+      marginRight: 'auto',
+      marginLeft: 'auto'
+    },
+    components: [
+      {
+        attributes: {
+          class: "container"
+        },
+        style: {
+          width: '100%',
+          'max-width': '1000px',
+          'padding': '15px',
+          'margin-right': 'auto',
+          'margin-left': 'auto'
+        },
+        content: 'long dep rai'
+      }
+    ]
   }
 })
 
